@@ -44,6 +44,24 @@
   .toggle-btn.active { background: #1a1a1a; color: #fff; }
   .toggle-btn:first-child { border-right: 0.5px solid #d0d0d0; }
 
+  .header-right { display: flex; align-items: center; gap: 10px; }
+
+  .export-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    font-size: 12px; font-weight: 500; color: #888;
+    background: #fff;
+    border: 0.5px solid #d0d0d0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .export-btn:hover { background: #f5f5f3; color: #444; border-color: #bbb; }
+  .export-btn:active { background: #eee; }
+  .export-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .export-btn.loading { opacity: 0.5; pointer-events: none; }
+
   .view { display: none; }
   .view.active { display: block; }
 
@@ -266,9 +284,15 @@
 
 <div class="page-header">
   <h1 class="page-title">Dandy's World — Store Wireframe</h1>
-  <div class="toggle">
-    <button class="toggle-btn active" onclick="switchView('desktop')">Desktop</button>
-    <button class="toggle-btn" onclick="switchView('mobile')">Mobile</button>
+  <div class="header-right">
+    <button class="export-btn" id="export-btn" onclick="exportImage()">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export PNG
+    </button>
+    <div class="toggle">
+      <button class="toggle-btn active" onclick="switchView('desktop', event)">Desktop</button>
+      <button class="toggle-btn" onclick="switchView('mobile', event)">Mobile</button>
+    </div>
   </div>
 </div>
 
@@ -541,12 +565,48 @@
 </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-  function switchView(view) {
+  var currentView = 'desktop';
+
+  function switchView(view, e) {
+    currentView = view;
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('view-' + view).classList.add('active');
-    event.target.classList.add('active');
+    e.target.classList.add('active');
+  }
+
+  function exportImage() {
+    var btn = document.getElementById('export-btn');
+    btn.classList.add('loading');
+    btn.textContent = 'Exporting…';
+
+    var target = document.querySelector('#view-' + currentView + ' .wf');
+    var scale = 2;
+
+    html2canvas(target, {
+      scale: scale,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#f5f5f3',
+      logging: false,
+      onclone: function(doc) {
+        doc.querySelectorAll('.view').forEach(function(v) { v.style.display = 'none'; });
+        var cloned = doc.getElementById('view-' + currentView);
+        cloned.style.display = 'block';
+      }
+    }).then(function(canvas) {
+      var link = document.createElement('a');
+      link.download = 'dandys-world-wireframe-' + currentView + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      btn.classList.remove('loading');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PNG';
+    }).catch(function() {
+      btn.classList.remove('loading');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PNG';
+    });
   }
 </script>
 </body>
