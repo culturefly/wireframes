@@ -305,7 +305,7 @@
   <nav class="nav">
     <div class="hamburger"><span></span><span></span><span></span></div>
     <div class="nav-logo">
-      <img src="https://cdn.shopify.com/s/files/1/0731/2136/6251/files/dandy-badge-01.svg?v=1778257174" alt="Dandy's World" width="36" height="36">
+      <div style="width:36px;height:36px;border-radius:50%;background:#e8e8e8;border:0.5px solid #ccc;"></div>
     </div>
     <div class="nav-icons">
       <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -416,7 +416,7 @@
       <div class="footer-links"><div class="fl" style="width:40%"></div><div class="fl" style="width:66%"></div><div class="fl" style="width:55%"></div><div class="fl" style="width:52%"></div><div class="fl" style="width:60%"></div></div>
     </div>
     <div>
-      <img class="footer-logo" src="https://cdn.shopify.com/s/files/1/0731/2136/6251/files/dandy-badge-01.svg?v=1778257174" alt="Dandy's World" width="40" height="40" style="margin-bottom:10px;">
+      <div style="width:40px;height:40px;border-radius:50%;background:#e8e8e8;border:0.5px solid #ccc;margin-bottom:10px;"></div>
       <div class="footer-text" style="width:100%"></div>
       <div class="footer-text" style="width:80%"></div>
       <div class="newsletter">
@@ -444,7 +444,7 @@
   <nav class="nav nav-mobile">
     <div class="hamburger sm"><span></span><span></span><span></span></div>
     <div class="nav-logo">
-      <img src="https://cdn.shopify.com/s/files/1/0731/2136/6251/files/dandy-badge-01.svg?v=1778257174" alt="Dandy's World" width="30" height="30">
+      <div style="width:30px;height:30px;border-radius:50%;background:#e8e8e8;border:0.5px solid #ccc;"></div>
     </div>
     <div class="nav-icons sm">
       <svg class="icon sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -546,7 +546,7 @@
       </div>
     </div>
     <div class="footer-divider">
-      <img class="footer-logo" src="https://cdn.shopify.com/s/files/1/0731/2136/6251/files/dandy-badge-01.svg?v=1778257174" alt="Dandy's World" width="34" height="34" style="margin-bottom:8px;">
+      <div style="width:34px;height:34px;border-radius:50%;background:#e8e8e8;border:0.5px solid #ccc;margin-bottom:8px;"></div>
       <div class="footer-text sm" style="width:100%"></div>
       <div class="footer-text sm" style="width:80%"></div>
       <div class="newsletter sm">
@@ -577,36 +577,6 @@
     e.target.classList.add('active');
   }
 
-  var LOGO_SRC = 'https://cdn.shopify.com/s/files/1/0731/2136/6251/files/dandy-badge-01.svg?v=1778257174';
-  var logoDataUrl = null;
-
-  function getLogoDataUrl() {
-    if (logoDataUrl) return Promise.resolve(logoDataUrl);
-    return fetch(LOGO_SRC)
-      .then(function(r) { return r.text(); })
-      .then(function(svgText) {
-        logoDataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgText)));
-        document.querySelectorAll('img').forEach(function(img) {
-          if (img.getAttribute('src') && img.getAttribute('src').indexOf('dandy-badge') !== -1) {
-            img.src = logoDataUrl;
-          }
-        });
-        return logoDataUrl;
-      });
-  }
-
-  getLogoDataUrl();
-
-  function getLogoDataUrl() {
-    if (logoDataUrl) return Promise.resolve(logoDataUrl);
-    return fetch(LOGO_SRC)
-      .then(function(r) { return r.text(); })
-      .then(function(svgText) {
-        logoDataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgText)));
-        return logoDataUrl;
-      });
-  }
-
   function exportImage() {
     var btn = document.getElementById('export-btn');
     btn.classList.add('loading');
@@ -614,20 +584,13 @@
 
     var target = document.querySelector('#view-' + currentView + ' .wf');
 
-    getLogoDataUrl().then(function(dataUrl) {
-      var imgs = target.querySelectorAll('img');
-      imgs.forEach(function(img) { img.src = dataUrl; });
-
-      return new Promise(function(resolve) { setTimeout(resolve, 100); });
-    }).then(function() {
-      return html2canvas(target, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: false,
-        backgroundColor: '#ffffff',
-        logging: false,
-        imageTimeout: 0
-      });
+    html2canvas(target, {
+      scale: 2,
+      useCORS: false,
+      allowTaint: false,
+      backgroundColor: '#ffffff',
+      logging: false,
+      imageTimeout: 0
     }).then(function(canvas) {
       var link = document.createElement('a');
       link.download = 'dandys-world-wireframe-' + currentView + '.png';
