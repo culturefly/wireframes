@@ -577,19 +577,33 @@
     e.target.classList.add('active');
   }
 
-  var logoDataUrl = null;
   var LOGO_SRC = 'https://cdn.shopify.com/s/files/1/0731/2136/6251/files/dandy-badge-01.svg?v=1778257174';
+  var logoDataUrl = null;
 
-  function fetchLogoAsDataUrl() {
+  function getLogoDataUrl() {
     if (logoDataUrl) return Promise.resolve(logoDataUrl);
     return fetch(LOGO_SRC)
-      .then(function(r) { return r.blob(); })
-      .then(function(blob) {
-        return new Promise(function(resolve) {
-          var reader = new FileReader();
-          reader.onload = function() { logoDataUrl = reader.result; resolve(logoDataUrl); };
-          reader.readAsDataURL(blob);
+      .then(function(r) { return r.text(); })
+      .then(function(svgText) {
+        logoDataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgText)));
+        document.querySelectorAll('img').forEach(function(img) {
+          if (img.getAttribute('src') && img.getAttribute('src').indexOf('dandy-badge') !== -1) {
+            img.src = logoDataUrl;
+          }
         });
+        return logoDataUrl;
+      });
+  }
+
+  getLogoDataUrl();
+
+  function getLogoDataUrl() {
+    if (logoDataUrl) return Promise.resolve(logoDataUrl);
+    return fetch(LOGO_SRC)
+      .then(function(r) { return r.text(); })
+      .then(function(svgText) {
+        logoDataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgText)));
+        return logoDataUrl;
       });
   }
 
@@ -599,33 +613,31 @@
     btn.textContent = 'Exporting…';
 
     var target = document.querySelector('#view-' + currentView + ' .wf');
-    var scale = 2;
 
-    fetchLogoAsDataUrl().then(function(dataUrl) {
-      html2canvas(target, {
-        scale: scale,
+    getLogoDataUrl().then(function(dataUrl) {
+      var imgs = target.querySelectorAll('img');
+      imgs.forEach(function(img) { img.src = dataUrl; });
+
+      return new Promise(function(resolve) { setTimeout(resolve, 100); });
+    }).then(function() {
+      return html2canvas(target, {
+        scale: 2,
         useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#f5f5f3',
+        allowTaint: false,
+        backgroundColor: '#ffffff',
         logging: false,
-        onclone: function(doc) {
-          doc.querySelectorAll('.view').forEach(function(v) { v.style.display = 'none'; });
-          var cloned = doc.getElementById('view-' + currentView);
-          cloned.style.display = 'block';
-          cloned.querySelectorAll('img').forEach(function(img) {
-            if (img.src.indexOf('dandy-badge') !== -1) {
-              img.src = dataUrl;
-            }
-          });
-        }
-      }).then(function(canvas) {
-        var link = document.createElement('a');
-        link.download = 'dandys-world-wireframe-' + currentView + '.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        resetBtn(btn);
-      }).catch(function() { resetBtn(btn); });
-    }).catch(function() { resetBtn(btn); });
+        imageTimeout: 0
+      });
+    }).then(function(canvas) {
+      var link = document.createElement('a');
+      link.download = 'dandys-world-wireframe-' + currentView + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      resetBtn(btn);
+    }).catch(function(e) {
+      console.error(e);
+      resetBtn(btn);
+    });
   }
 
   function resetBtn(btn) {
