@@ -577,6 +577,22 @@
     e.target.classList.add('active');
   }
 
+  var logoDataUrl = null;
+  var LOGO_SRC = 'https://cdn.shopify.com/s/files/1/0731/2136/6251/files/dandy-badge-01.svg?v=1778257174';
+
+  function fetchLogoAsDataUrl() {
+    if (logoDataUrl) return Promise.resolve(logoDataUrl);
+    return fetch(LOGO_SRC)
+      .then(function(r) { return r.blob(); })
+      .then(function(blob) {
+        return new Promise(function(resolve) {
+          var reader = new FileReader();
+          reader.onload = function() { logoDataUrl = reader.result; resolve(logoDataUrl); };
+          reader.readAsDataURL(blob);
+        });
+      });
+  }
+
   function exportImage() {
     var btn = document.getElementById('export-btn');
     btn.classList.add('loading');
@@ -585,28 +601,36 @@
     var target = document.querySelector('#view-' + currentView + ' .wf');
     var scale = 2;
 
-    html2canvas(target, {
-      scale: scale,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: '#f5f5f3',
-      logging: false,
-      onclone: function(doc) {
-        doc.querySelectorAll('.view').forEach(function(v) { v.style.display = 'none'; });
-        var cloned = doc.getElementById('view-' + currentView);
-        cloned.style.display = 'block';
-      }
-    }).then(function(canvas) {
-      var link = document.createElement('a');
-      link.download = 'dandys-world-wireframe-' + currentView + '.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      btn.classList.remove('loading');
-      btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PNG';
-    }).catch(function() {
-      btn.classList.remove('loading');
-      btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PNG';
-    });
+    fetchLogoAsDataUrl().then(function(dataUrl) {
+      html2canvas(target, {
+        scale: scale,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#f5f5f3',
+        logging: false,
+        onclone: function(doc) {
+          doc.querySelectorAll('.view').forEach(function(v) { v.style.display = 'none'; });
+          var cloned = doc.getElementById('view-' + currentView);
+          cloned.style.display = 'block';
+          cloned.querySelectorAll('img').forEach(function(img) {
+            if (img.src.indexOf('dandy-badge') !== -1) {
+              img.src = dataUrl;
+            }
+          });
+        }
+      }).then(function(canvas) {
+        var link = document.createElement('a');
+        link.download = 'dandys-world-wireframe-' + currentView + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        resetBtn(btn);
+      }).catch(function() { resetBtn(btn); });
+    }).catch(function() { resetBtn(btn); });
+  }
+
+  function resetBtn(btn) {
+    btn.classList.remove('loading');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PNG';
   }
 </script>
 </body>
