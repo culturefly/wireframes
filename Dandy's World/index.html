@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dandy's World — Store Wireframe</title>
+<title>Dandy's World</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -21,7 +21,22 @@
     align-items: center;
     justify-content: space-between;
   }
-  .page-title { font-size: 13px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.08em; }
+  .page-title { font-size: 13px; font-weight: 600; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.1em; }
+
+  .header-left { display: flex; align-items: center; gap: 12px; }
+
+  .version-select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 5px 28px 5px 12px;
+    font-size: 12px; font-weight: 500; color: #888;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23aaa' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 9px center;
+    border: 0.5px solid #d0d0d0;
+    border-radius: 8px;
+    cursor: pointer;
+    outline: none;
+  }
+  .version-select:hover { border-color: #bbb; color: #444; }
 
   .toggle {
     display: flex;
@@ -283,7 +298,12 @@
 <body>
 
 <div class="page-header">
-  <h1 class="page-title">Dandy's World — Store Wireframe</h1>
+  <div class="header-left">
+    <h1 class="page-title">Dandy's World</h1>
+    <select class="version-select" onchange="switchVersion(this.value)">
+      <option value="a">Wireframe A</option>
+    </select>
+  </div>
   <div class="header-right">
     <button class="export-btn" id="export-btn" onclick="exportImage()">
       <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -352,27 +372,6 @@
     <div class="scroll-hint">scrolls horizontally →</div>
   </div>
 
-  <!-- Featured Product -->
-  <div class="feat-wrap">
-    <div class="feat-img d">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      <span>Product image</span>
-    </div>
-    <div class="feat-info">
-      <div class="feat-eyebrow">Featured product</div>
-      <div class="bar" style="height:16px; margin-bottom:7px;"></div>
-      <div class="bar" style="height:16px; width:60%; margin-bottom:14px;"></div>
-      <div class="bar" style="height:11px; width:28%; margin-bottom:6px;"></div>
-      <div class="bar" style="height:10px; width:82%;"></div>
-      <div class="feat-meta">
-        <div class="bar" style="height:9px; width:70%; margin-bottom:5px;"></div>
-        <div class="bar" style="height:9px; width:50%; margin-bottom:5px;"></div>
-        <div class="bar" style="height:9px; width:40%;"></div>
-      </div>
-      <div class="feat-cta">Add to cart</div>
-    </div>
-  </div>
-
   <!-- Shop by Category -->
   <div class="section">
     <div class="section-header"><span class="section-title">Shop by Category</span></div>
@@ -403,6 +402,27 @@
     </div>
     <div class="scroll-hint">scrolls horizontally →</div>
     <div class="view-all"><div class="view-all-btn">View all</div></div>
+  </div>
+
+  <!-- Featured Product -->
+  <div class="feat-wrap">
+    <div class="feat-img d">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span>Product image</span>
+    </div>
+    <div class="feat-info">
+      <div class="feat-eyebrow">Featured product</div>
+      <div class="bar" style="height:16px; margin-bottom:7px;"></div>
+      <div class="bar" style="height:16px; width:60%; margin-bottom:14px;"></div>
+      <div class="bar" style="height:11px; width:28%; margin-bottom:6px;"></div>
+      <div class="bar" style="height:10px; width:82%;"></div>
+      <div class="feat-meta">
+        <div class="bar" style="height:9px; width:70%; margin-bottom:5px;"></div>
+        <div class="bar" style="height:9px; width:50%; margin-bottom:5px;"></div>
+        <div class="bar" style="height:9px; width:40%;"></div>
+      </div>
+      <div class="feat-cta">Add to cart</div>
+    </div>
   </div>
 
   <!-- Footer -->
@@ -486,25 +506,6 @@
     <div class="scroll-hint sm">swipe to browse →</div>
   </div>
 
-  <!-- Featured Product -->
-  <div class="section sm" style="border-bottom: 0.5px solid #e8e8e8;">
-    <div class="feat-img m">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      <span>Product image</span>
-    </div>
-    <div class="feat-eyebrow sm">Featured product</div>
-    <div class="bar" style="height:15px; margin-bottom:6px;"></div>
-    <div class="bar" style="height:15px; width:65%; margin-bottom:12px;"></div>
-    <div class="bar" style="height:11px; width:28%; margin-bottom:5px;"></div>
-    <div class="bar" style="height:10px; width:90%;"></div>
-    <div class="feat-meta sm">
-      <div class="bar" style="height:8px; width:70%; margin-bottom:5px;"></div>
-      <div class="bar" style="height:8px; width:50%; margin-bottom:5px;"></div>
-      <div class="bar" style="height:8px; width:40%;"></div>
-    </div>
-    <div class="feat-cta sm">Add to cart</div>
-  </div>
-
   <!-- Shop by Category -->
   <div class="section sm">
     <div class="section-header"><span class="section-title sm">Shop by Category</span></div>
@@ -531,6 +532,25 @@
     </div>
     <div class="scroll-hint sm">swipe to browse →</div>
     <div class="view-all"><div class="view-all-btn sm">View all</div></div>
+  </div>
+
+  <!-- Featured Product -->
+  <div class="section sm" style="border-bottom: 0.5px solid #e8e8e8;">
+    <div class="feat-img m">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span>Product image</span>
+    </div>
+    <div class="feat-eyebrow sm">Featured product</div>
+    <div class="bar" style="height:15px; margin-bottom:6px;"></div>
+    <div class="bar" style="height:15px; width:65%; margin-bottom:12px;"></div>
+    <div class="bar" style="height:11px; width:28%; margin-bottom:5px;"></div>
+    <div class="bar" style="height:10px; width:90%;"></div>
+    <div class="feat-meta sm">
+      <div class="bar" style="height:8px; width:70%; margin-bottom:5px;"></div>
+      <div class="bar" style="height:8px; width:50%; margin-bottom:5px;"></div>
+      <div class="bar" style="height:8px; width:40%;"></div>
+    </div>
+    <div class="feat-cta sm">Add to cart</div>
   </div>
 
   <!-- Footer -->
@@ -568,6 +588,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
   var currentView = 'desktop';
+
+  function switchVersion(val) {
+    // placeholder for future versions
+  }
 
   function switchView(view, e) {
     currentView = view;
