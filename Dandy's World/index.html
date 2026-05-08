@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dandy's World — Store Wireframe</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f5f5f3;
+    padding: 2rem 1rem 4rem;
+    color: #1a1a1a;
+  }
+
+  .page-header {
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .page-title { font-size: 13px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .toggle {
+    display: flex;
+    border: 0.5px solid #d0d0d0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .toggle-btn {
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #888;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    letter-spacing: 0.03em;
+  }
+  .toggle-btn.active { background: #1a1a1a; color: #fff; }
+  .toggle-btn:first-child { border-right: 0.5px solid #d0d0d0; }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── SHARED WIREFRAME ATOMS ── */
+  .wf {
+    margin: 0 auto;
+    border: 0.5px solid #d0d0d0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .wf-desktop { max-width: 720px; }
+  .wf-mobile  { max-width: 360px; }
+
+  .announcement {
+    background: #f0f0ee;
+    border-bottom: 0.5px solid #e0e0e0;
+    padding: 6px 12px;
+    text-align: center;
+    font-size: 11px;
+    color: #888;
+  }
+
+  /* NAV */
+  .nav {
+    background: #fff;
+    border-bottom: 0.5px solid #e8e8e8;
+    padding: 10px 20px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+  .nav-mobile { padding: 10px 14px; }
+  .hamburger { display: flex; flex-direction: column; justify-content: space-between; width: 20px; height: 12px; }
+  .hamburger span { display: block; height: 1.5px; background: #888; border-radius: 1px; }
+  .hamburger.sm { width: 18px; height: 11px; }
+  .nav-logo img { display: block; }
+  .nav-icons { display: flex; gap: 14px; justify-content: flex-end; align-items: center; }
+  .nav-icons.sm { gap: 10px; }
+  .icon { width: 17px; height: 17px; stroke: #888; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .icon.sm { width: 15px; height: 15px; }
+
+  /* HERO */
+  .hero {
+    background: #e8e8e6;
+    border-bottom: 0.5px solid #e0e0e0;
+    min-height: 280px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 24px 24px;
+  }
+  .hero.sm { min-height: 200px; padding: 16px 14px; }
+  .hero-label {
+    position: absolute; top: 12px; left: 14px;
+    font-size: 10px; font-weight: 500; color: #888;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    border: 0.5px solid #ccc; border-radius: 6px;
+    padding: 2px 8px; background: rgba(255,255,255,0.6);
+  }
+  .hero-label.sm { font-size: 9px; top: 8px; left: 10px; border-radius: 4px; padding: 2px 6px; }
+  .hero-icon { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+  .hero-icon svg { width: 48px; height: 48px; stroke: #bbb; fill: none; stroke-width: 1.2; }
+  .hero-icon.sm svg { width: 36px; height: 36px; }
+  .hero-content { position: relative; z-index: 1; }
+  .bar-hero-h { height: 22px; background: rgba(255,255,255,0.85); border: 0.5px dashed #ccc; border-radius: 6px; margin-bottom: 8px; max-width: 280px; }
+  .bar-hero-h.sm { height: 18px; max-width: 180px; margin-bottom: 6px; }
+  .bar-hero-sub { height: 14px; width: 75%; background: rgba(255,255,255,0.7); border: 0.5px dashed #ccc; border-radius: 6px; margin-bottom: 16px; max-width: 220px; }
+  .bar-hero-sub.sm { height: 12px; margin-bottom: 12px; }
+  .hero-cta { height: 36px; width: 128px; background: rgba(255,255,255,0.85); border: 0.5px dashed #ccc; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #aaa; }
+  .hero-cta.sm { height: 30px; width: 100px; font-size: 9px; }
+  .hero-dots { position: absolute; bottom: 14px; right: 20px; display: flex; gap: 5px; align-items: center; }
+  .hero-dots.sm { bottom: 10px; right: 14px; gap: 4px; }
+  .dot-a { width: 20px; height: 4px; border-radius: 2px; background: #555; opacity: 0.6; }
+  .dot-a.sm { width: 16px; height: 3px; }
+  .dot-i { width: 6px; height: 4px; border-radius: 2px; background: #ccc; }
+  .dot-i.sm { width: 5px; height: 3px; }
+
+  /* SECTIONS */
+  .section { padding: 20px 20px; border-bottom: 0.5px solid #e8e8e8; background: #fff; }
+  .section.sm { padding: 16px 14px; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .section-title { font-size: 14px; font-weight: 500; color: #1a1a1a; }
+  .section-title.sm { font-size: 13px; }
+  .chevron { font-size: 18px; color: #bbb; line-height: 1; }
+  .scroll-hint { font-size: 10px; color: #bbb; text-align: right; margin-top: 6px; }
+  .scroll-hint.sm { font-size: 9px; }
+
+  /* GRIDS */
+  .char-grid-d  { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .char-grid-m  { display: grid; grid-template-columns: 1fr 1fr 24px; gap: 8px; align-items: start; }
+  .prod-grid-d  { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .prod-grid-m  { display: grid; grid-template-columns: 1fr 1fr 24px; gap: 8px; align-items: start; }
+
+  /* CHARACTER CIRCLE */
+  .char-item { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+  .char-circle {
+    width: 100%; aspect-ratio: 1; border-radius: 50%;
+    background: #f0f0ee; border: 0.5px dashed #ccc;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .char-circle svg { width: 20px; height: 20px; stroke: #ccc; fill: none; stroke-width: 1.3; }
+  .char-circle.sm svg { width: 18px; height: 18px; }
+  .char-label { height: 8px; width: 80%; background: #e8e8e8; border-radius: 2px; }
+  .char-label.sm { height: 7px; width: 70%; }
+  .faded { opacity: 0.35; }
+
+  /* PEEK SLIVER */
+  .peek-circle { display: flex; align-items: flex-start; padding-top: 10%; opacity: 0.15; }
+  .peek-circle-inner { width: 14px; height: 75%; border-radius: 50% 0 0 50% / 50%; background: #f0f0ee; border: 0.5px dashed #ccc; }
+  .peek-card { display: flex; align-items: flex-start; padding-top: 20%; opacity: 0.15; }
+  .peek-card-inner { width: 14px; height: 60%; border-radius: 6px 0 0 6px; background: #f0f0ee; border: 0.5px dashed #ccc; }
+
+  /* PRODUCT CARD */
+  .prod-card { border: 0.5px solid #e8e8e8; border-radius: 8px; overflow: hidden; }
+  .prod-img { background: #f0f0ee; aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; }
+  .prod-img svg { width: 22px; height: 22px; stroke: #ccc; fill: none; stroke-width: 1.3; }
+  .prod-info { padding: 6px 7px; }
+  .prod-name { height: 8px; background: #e8e8e8; border-radius: 2px; margin-bottom: 5px; }
+  .prod-name.sm { height: 7px; }
+  .prod-price { height: 8px; width: 45%; background: #e8e8e8; border-radius: 2px; }
+  .prod-price.sm { height: 7px; }
+
+  /* FEATURED PRODUCT */
+  .feat-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; padding: 20px; border-bottom: 0.5px solid #e8e8e8; }
+  .feat-img { background: #f0f0ee; border: 0.5px dashed #ccc; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+  .feat-img.d { height: 200px; }
+  .feat-img.m { aspect-ratio: 4/3; margin-bottom: 14px; }
+  .feat-img svg { width: 30px; height: 30px; stroke: #ccc; fill: none; stroke-width: 1.2; }
+  .feat-img.m svg { width: 28px; height: 28px; }
+  .feat-img span { font-size: 10px; color: #bbb; }
+  .feat-info { }
+  .feat-eyebrow { font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 7px; }
+  .feat-eyebrow.sm { font-size: 9px; margin-bottom: 6px; }
+  .bar { background: #e8e8e8; border-radius: 3px; }
+  .feat-meta { border: 0.5px solid #e8e8e8; border-radius: 8px; padding: 10px; margin: 14px 0 8px; }
+  .feat-meta.sm { padding: 9px; }
+  .feat-cta { background: #f0f0ee; border: 0.5px solid #ddd; border-radius: 8px; padding: 10px; text-align: center; font-size: 12px; color: #999; }
+  .feat-cta.sm { font-size: 11px; }
+
+  /* CATEGORY TILES */
+  .cat-grid-d { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 150px 110px; gap: 8px; }
+  .cat-tile { background: #f0f0ee; border: 0.5px dashed #ccc; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+  .cat-tile svg { stroke: #ccc; fill: none; stroke-width: 1.3; }
+  .cat-tile span { font-size: 12px; font-weight: 500; color: #999; }
+  .tile-plush { grid-column: 1; grid-row: 1 / 3; }
+  .tile-apparel { grid-column: 2; grid-row: 1; }
+  .tile-row { grid-column: 2; grid-row: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tile-sub { background: #f0f0ee; border: 0.5px dashed #ccc; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+  .tile-sub svg { width: 18px; height: 18px; stroke: #ccc; fill: none; stroke-width: 1.3; }
+  .tile-sub span { font-size: 10px; font-weight: 500; color: #999; text-align: center; }
+  .cat-grid-m { display: flex; flex-direction: column; gap: 8px; }
+  .cat-tile-m { background: #f0f0ee; border: 0.5px dashed #ccc; border-radius: 8px; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+  .cat-tile-m svg { width: 22px; height: 22px; stroke: #ccc; fill: none; stroke-width: 1.3; }
+  .cat-tile-m span { font-size: 12px; font-weight: 500; color: #999; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tab { border: 0.5px solid #ddd; border-radius: 20px; padding: 3px 12px; font-size: 11px; color: #888; }
+  .tab.sm { font-size: 10px; }
+  .tab.active { background: #f0f0ee; border-color: #ccc; color: #444; }
+
+  /* VIEW ALL */
+  .view-all { display: flex; justify-content: center; margin-top: 14px; }
+  .view-all-btn { border: 0.5px solid #ddd; border-radius: 20px; padding: 6px 18px; font-size: 11px; color: #888; }
+  .view-all-btn.sm { font-size: 10px; }
+
+  /* FOOTER */
+  .footer-d {
+    background: #f5f5f3; padding: 24px 20px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
+    border-top: 0.5px solid #e8e8e8;
+  }
+  .footer-m {
+    background: #f5f5f3; padding: 18px 14px;
+    border-top: 0.5px solid #e8e8e8;
+  }
+  .footer-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
+  .footer-divider { border-top: 0.5px solid #e0e0e0; padding-top: 14px; }
+  .footer-col-title { font-size: 11px; font-weight: 500; color: #444; margin-bottom: 10px; }
+  .footer-col-title.sm { margin-bottom: 8px; }
+  .footer-links { display: flex; flex-direction: column; gap: 6px; }
+  .footer-links.sm { gap: 5px; }
+  .fl { height: 8px; background: #e0e0de; border-radius: 2px; }
+  .fl.sm { height: 7px; }
+  .footer-logo { display: block; }
+  .footer-text { height: 9px; background: #e0e0de; border-radius: 2px; margin-bottom: 5px; }
+  .footer-text.sm { height: 8px; margin-bottom: 4px; }
+  .newsletter { display: flex; gap: 6px; align-items: center; margin-top: 12px; }
+  .newsletter.sm { margin-top: 10px; }
+  .newsletter-input { flex: 1; border: 0.5px solid #e0e0e0; border-radius: 6px; padding: 6px 10px; }
+  .newsletter-input div { height: 8px; background: #e8e8e8; border-radius: 2px; }
+  .newsletter-input.sm div { height: 7px; }
+  .newsletter-btn { width: 30px; height: 30px; border: 0.5px solid #ddd; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .newsletter-btn svg { width: 13px; height: 13px; stroke: #888; fill: none; stroke-width: 2; stroke-linecap: round; }
+  .social-icons { display: flex; gap: 8px; margin-top: 10px; }
+  .social-dot { width: 22px; height: 22px; border-radius: 50%; background: #e0e0de; border: 0.5px solid #ccc; }
+  .social-dot.sm { width: 20px; height: 20px; }
+
+  /* FOOTER BAR */
+  .footer-bar {
+    background: #f5f5f3; border-top: 0.5px solid #e0e0e0;
+    padding: 8px 20px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-bar.sm { padding: 8px 14px; }
+  .copyright { font-size: 10px; color: #bbb; }
+  .copyright.sm { font-size: 9px; }
+  .payment-icons { display: flex; gap: 4px; }
+  .payment-icon { background: #e8e8e8; border-radius: 2px; border: 0.5px solid #ddd; }
+  .payment-icon.d { width: 24px; height: 15px; }
+  .payment-icon.m { width: 20px; height: 12px; }
+
+  /* PHOTO ICON SVG */
+  .photo-svg { stroke: #ccc; fill: none; stroke-width: 1.3; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1 class="page-title">Dandy's World — Store Wireframe</h1>
+  <div class="toggle">
+    <button class="toggle-btn active" onclick="switchView('desktop')">Desktop</button>
+    <button class="toggle-btn" onclick="switchView('mobile')">Mobile</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ DESKTOP ═══ -->
+<div id="view-desktop" class="view active">
+<div class="wf wf-desktop">
+
+  <div class="announcement">Announcement bar</div>
+
+  <nav class="nav">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="nav-logo">
+      <img src="https://cdn.shopify.com/s/files/1/0731/2136/6251/files/dandy-badge-01.svg?v=1778257174" alt="Dandy's World" width="36" height="36">
+    </div>
+    <div class="nav-icons">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <svg class="icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <svg class="icon" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-label">Hero banner — fullscreen image</div>
+    <div class="hero-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+    <div class="hero-content">
+      <div class="bar-hero-h"></div>
+      <div class="bar-hero-sub"></div>
+      <div class="hero-cta">CTA button</div>
+    </div>
+    <div class="hero-dots"><div class="dot-a"></div><div class="dot-i"></div><div class="dot-i"></div></div>
+  </div>
+
+  <!-- Shop by Character -->
+  <div class="section">
+    <div class="section-header"><span class="section-title">Shop by Character</span><span class="chevron">›</span></div>
+    <div class="char-grid-d">
+      <div class="char-item"><div class="char-circle"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="char-label"></div></div>
+      <div class="char-item"><div class="char-circle"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="char-label"></div></div>
+      <div class="char-item"><div class="char-circle"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="char-label"></div></div>
+      <div class="char-item"><div class="char-circle"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="char-label"></div></div>
+      <div class="char-item faded"><div class="char-circle"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="char-label"></div></div>
+    </div>
+    <div class="scroll-hint">scrolls horizontally →</div>
+  </div>
+
+  <!-- Featured Plush -->
+  <div class="section">
+    <div class="section-header"><span class="section-title">Featured Plush</span><span class="chevron">›</span></div>
+    <div class="prod-grid-d">
+      <div class="prod-card"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name"></div><div class="prod-price"></div></div></div>
+      <div class="prod-card"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name"></div><div class="prod-price"></div></div></div>
+      <div class="prod-card"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name"></div><div class="prod-price"></div></div></div>
+      <div class="prod-card"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name"></div><div class="prod-price"></div></div></div>
+      <div class="prod-card faded"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name"></div><div class="prod-price"></div></div></div>
+    </div>
+    <div class="scroll-hint">scrolls horizontally →</div>
+  </div>
+
+  <!-- Featured Product -->
+  <div class="feat-wrap">
+    <div class="feat-img d">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span>Product image</span>
+    </div>
+    <div class="feat-info">
+      <div class="feat-eyebrow">Featured product</div>
+      <div class="bar" style="height:16px; margin-bottom:7px;"></div>
+      <div class="bar" style="height:16px; width:60%; margin-bottom:14px;"></div>
+      <div class="bar" style="height:11px; width:28%; margin-bottom:6px;"></div>
+      <div class="bar" style="height:10px; width:82%;"></div>
+      <div class="feat-meta">
+        <div class="bar" style="height:9px; width:70%; margin-bottom:5px;"></div>
+        <div class="bar" style="height:9px; width:50%; margin-bottom:5px;"></div>
+        <div class="bar" style="height:9px; width:40%;"></div>
+      </div>
+      <div class="feat-cta">Add to cart</div>
+    </div>
+  </div>
+
+  <!-- Shop by Category -->
+  <div class="section">
+    <div class="section-header"><span class="section-title">Shop by Category</span></div>
+    <div class="cat-grid-d">
+      <div class="cat-tile tile-plush"><svg width="26" height="26" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Plush</span></div>
+      <div class="cat-tile tile-apparel"><svg width="22" height="22" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Apparel</span></div>
+      <div class="tile-row">
+        <div class="tile-sub"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Collectibles</span></div>
+        <div class="tile-sub"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Accessories</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shop Featured Collections -->
+  <div class="section">
+    <div class="section-header"><span class="section-title">Shop Featured Collections</span><span class="chevron">›</span></div>
+    <div class="tabs">
+      <div class="tab active">New Arrivals</div>
+      <div class="tab">Easter</div>
+      <div class="tab">Plush</div>
+    </div>
+    <div class="prod-grid-d">
+      <div class="prod-card"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name"></div><div class="prod-price"></div></div></div>
+      <div class="prod-card"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name"></div><div class="prod-price"></div></div></div>
+      <div class="prod-card"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name"></div><div class="prod-price"></div></div></div>
+      <div class="prod-card"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name"></div><div class="prod-price"></div></div></div>
+      <div class="prod-card faded"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name"></div><div class="prod-price"></div></div></div>
+    </div>
+    <div class="scroll-hint">scrolls horizontally →</div>
+    <div class="view-all"><div class="view-all-btn">View all</div></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-d">
+    <div>
+      <div class="footer-col-title">Quick links</div>
+      <div class="footer-links"><div class="fl" style="width:50%"></div><div class="fl" style="width:62%"></div><div class="fl" style="width:55%"></div><div class="fl" style="width:42%"></div><div class="fl" style="width:48%"></div></div>
+    </div>
+    <div>
+      <div class="footer-col-title">Information</div>
+      <div class="footer-links"><div class="fl" style="width:40%"></div><div class="fl" style="width:66%"></div><div class="fl" style="width:55%"></div><div class="fl" style="width:52%"></div><div class="fl" style="width:60%"></div></div>
+    </div>
+    <div>
+      <img class="footer-logo" src="https://cdn.shopify.com/s/files/1/0731/2136/6251/files/dandy-badge-01.svg?v=1778257174" alt="Dandy's World" width="40" height="40" style="margin-bottom:10px;">
+      <div class="footer-text" style="width:100%"></div>
+      <div class="footer-text" style="width:80%"></div>
+      <div class="newsletter">
+        <div class="newsletter-input"><div></div></div>
+        <div class="newsletter-btn"><svg viewBox="0 0 16 16"><line x1="2" y1="8" x2="14" y2="8"/><polyline points="9 3 14 8 9 13"/></svg></div>
+      </div>
+      <div class="social-icons"><div class="social-dot"></div><div class="social-dot"></div><div class="social-dot"></div></div>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <span class="copyright">© 2026 Dandy's World. Powered by CultureFly.</span>
+    <div class="payment-icons"><div class="payment-icon d"></div><div class="payment-icon d"></div><div class="payment-icon d"></div><div class="payment-icon d"></div></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ MOBILE ═══ -->
+<div id="view-mobile" class="view">
+<div class="wf wf-mobile">
+
+  <div class="announcement" style="font-size:10px;">Announcement bar</div>
+
+  <nav class="nav nav-mobile">
+    <div class="hamburger sm"><span></span><span></span><span></span></div>
+    <div class="nav-logo">
+      <img src="https://cdn.shopify.com/s/files/1/0731/2136/6251/files/dandy-badge-01.svg?v=1778257174" alt="Dandy's World" width="30" height="30">
+    </div>
+    <div class="nav-icons sm">
+      <svg class="icon sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <svg class="icon sm" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero sm">
+    <div class="hero-label sm">Hero — fullscreen image</div>
+    <div class="hero-icon sm"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+    <div class="hero-content">
+      <div class="bar-hero-h sm"></div>
+      <div class="bar-hero-sub sm"></div>
+      <div class="hero-cta sm">CTA button</div>
+    </div>
+    <div class="hero-dots sm"><div class="dot-a sm"></div><div class="dot-i sm"></div><div class="dot-i sm"></div></div>
+  </div>
+
+  <!-- Shop by Character -->
+  <div class="section sm">
+    <div class="section-header"><span class="section-title sm">Shop by Character</span><span class="chevron" style="font-size:16px;">›</span></div>
+    <div class="char-grid-m">
+      <div class="char-item"><div class="char-circle sm"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="char-label sm"></div></div>
+      <div class="char-item faded"><div class="char-circle sm"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="char-label sm"></div></div>
+      <div class="peek-circle"><div class="peek-circle-inner"></div></div>
+    </div>
+    <div class="scroll-hint sm">swipe to browse →</div>
+  </div>
+
+  <!-- Featured Plush -->
+  <div class="section sm">
+    <div class="section-header"><span class="section-title sm">Featured Plush</span><span class="chevron" style="font-size:16px;">›</span></div>
+    <div class="prod-grid-m">
+      <div class="prod-card"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name sm"></div><div class="prod-price sm"></div></div></div>
+      <div class="prod-card faded"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name sm"></div><div class="prod-price sm"></div></div></div>
+      <div class="peek-card"><div class="peek-card-inner"></div></div>
+    </div>
+    <div class="scroll-hint sm">swipe to browse →</div>
+  </div>
+
+  <!-- Featured Product -->
+  <div class="section sm" style="border-bottom: 0.5px solid #e8e8e8;">
+    <div class="feat-img m">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span>Product image</span>
+    </div>
+    <div class="feat-eyebrow sm">Featured product</div>
+    <div class="bar" style="height:15px; margin-bottom:6px;"></div>
+    <div class="bar" style="height:15px; width:65%; margin-bottom:12px;"></div>
+    <div class="bar" style="height:11px; width:28%; margin-bottom:5px;"></div>
+    <div class="bar" style="height:10px; width:90%;"></div>
+    <div class="feat-meta sm">
+      <div class="bar" style="height:8px; width:70%; margin-bottom:5px;"></div>
+      <div class="bar" style="height:8px; width:50%; margin-bottom:5px;"></div>
+      <div class="bar" style="height:8px; width:40%;"></div>
+    </div>
+    <div class="feat-cta sm">Add to cart</div>
+  </div>
+
+  <!-- Shop by Category -->
+  <div class="section sm">
+    <div class="section-header"><span class="section-title sm">Shop by Category</span></div>
+    <div class="cat-grid-m">
+      <div class="cat-tile-m"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Plush</span></div>
+      <div class="cat-tile-m"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Apparel</span></div>
+      <div class="cat-tile-m"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Collectibles</span></div>
+      <div class="cat-tile-m"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Accessories</span></div>
+    </div>
+  </div>
+
+  <!-- Shop Featured Collections -->
+  <div class="section sm">
+    <div class="section-header"><span class="section-title sm">Shop Featured Collections</span><span class="chevron" style="font-size:16px;">›</span></div>
+    <div class="tabs" style="margin-bottom:12px;">
+      <div class="tab sm active">New Arrivals</div>
+      <div class="tab sm">Easter</div>
+      <div class="tab sm">Plush</div>
+    </div>
+    <div class="prod-grid-m">
+      <div class="prod-card"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name sm"></div><div class="prod-price sm"></div></div></div>
+      <div class="prod-card faded"><div class="prod-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="prod-info"><div class="prod-name sm"></div><div class="prod-price sm"></div></div></div>
+      <div class="peek-card"><div class="peek-card-inner"></div></div>
+    </div>
+    <div class="scroll-hint sm">swipe to browse →</div>
+    <div class="view-all"><div class="view-all-btn sm">View all</div></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-m">
+    <div class="footer-2col">
+      <div>
+        <div class="footer-col-title sm">Quick links</div>
+        <div class="footer-links sm"><div class="fl sm" style="width:55%"></div><div class="fl sm" style="width:65%"></div><div class="fl sm" style="width:50%"></div><div class="fl sm" style="width:42%"></div></div>
+      </div>
+      <div>
+        <div class="footer-col-title sm">Information</div>
+        <div class="footer-links sm"><div class="fl sm" style="width:40%"></div><div class="fl sm" style="width:68%"></div><div class="fl sm" style="width:55%"></div><div class="fl sm" style="width:52%"></div></div>
+      </div>
+    </div>
+    <div class="footer-divider">
+      <img class="footer-logo" src="https://cdn.shopify.com/s/files/1/0731/2136/6251/files/dandy-badge-01.svg?v=1778257174" alt="Dandy's World" width="34" height="34" style="margin-bottom:8px;">
+      <div class="footer-text sm" style="width:100%"></div>
+      <div class="footer-text sm" style="width:80%"></div>
+      <div class="newsletter sm">
+        <div class="newsletter-input sm"><div></div></div>
+        <div class="newsletter-btn"><svg viewBox="0 0 16 16"><line x1="2" y1="8" x2="14" y2="8"/><polyline points="9 3 14 8 9 13"/></svg></div>
+      </div>
+      <div class="social-icons"><div class="social-dot sm"></div><div class="social-dot sm"></div><div class="social-dot sm"></div></div>
+    </div>
+  </div>
+
+  <div class="footer-bar sm">
+    <span class="copyright sm">© 2026 Dandy's World</span>
+    <div class="payment-icons"><div class="payment-icon m"></div><div class="payment-icon m"></div><div class="payment-icon m"></div></div>
+  </div>
+
+</div>
+</div>
+
+<script>
+  function switchView(view) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>
